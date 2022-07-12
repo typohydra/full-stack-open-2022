@@ -1,0 +1,20 @@
+title New note
+
+note over browser:
+    user adds a note.
+    event handler form.onsubmit is executed.
+    redrawNotes() is called, new note is displayed.
+    sendToServer() is called.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+    note is saved in database.
+end note
+
+server-->browser: JSON-data
+
+note over browser:
+    console log executes.
+end note
