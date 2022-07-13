@@ -2,26 +2,34 @@ import { useState } from 'react'
 
 const Header = ({text}) => <h1>{text}</h1>
 
-const Button = ({text, handleClick}) => (
-  <button onClick={handleClick}>{text}</button>
-)
+const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>
+
+const StatisticLine = ({text, value}) => <p>{text} {value} {text === 'positive' ? '%' : ''}</p>
 
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
   const average = (good - bad) / all
   const positive = (good / all) * 100
 
-  return (
-    <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average { average || 0}</p>
-      <p>positive { positive || 0 } %</p>
-    </div>
-  )
+  if (good || neutral || bad) {
+    return (
+      <div>
+        <StatisticLine text='good' value={ good } />
+        <StatisticLine text='neutral' value={ neutral } />
+        <StatisticLine text='bad' value={ bad } />
+        <StatisticLine text='all' value={ all } />
+        <StatisticLine text='average' value={ average } />
+        <StatisticLine text='positive' value={ positive } />
+      </div>
+    )
+  }
+  else {
+    return (
+      <div>No feedback given</div> 
+    )
+  }
 }
+
 
 const App = () => {
   const [good, setGood] = useState(0)
