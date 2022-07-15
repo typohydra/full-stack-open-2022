@@ -6,8 +6,17 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+  const checkIfNameExists = (name) => {
+    return persons.find( person => person.name === name)
+  } 
+
   const addPerson = (event) => {
     event.preventDefault()
+    if (checkIfNameExists(newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+    
     const person = {
       name: newName
     }
