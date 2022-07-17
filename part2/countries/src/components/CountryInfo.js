@@ -1,6 +1,6 @@
-const CountryInfo = ({country}) =>  {
-  return(
+import Weather from "./Weather"
 
+const CountryInfo = ({country}) =>  (
   <div>
     <h1>{country.name.common}</h1>
     <div>capital(s): {country.capital.join(', ')}</div>
@@ -13,7 +13,8 @@ const CountryInfo = ({country}) =>  {
       }
     </ul>
     <img src={country.flags.png} alt={`${country.name.common} flag`} />
+    <Weather capital={country.capital[0]} />
   </div>
-)}
+)
 
 export default CountryInfo
