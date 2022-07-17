@@ -25,7 +25,7 @@ const App = () => {
   return (
     <>
       find countries <input value={search} onChange={handleSearchChange}/>
-      <DisplayResult search={search} countries={countreisToDisplay} />  
+      <DisplayResult search={search} setSearch={setSearch} countries={countreisToDisplay} />  
     </>
   )
 }

@@ -1,4 +1,6 @@
-const CountryInfo = ({country}) =>  (
+const CountryInfo = ({country}) =>  {
+  return(
+
   <div>
     <h1>{country.name.common}</h1>
     <div>capital(s): {country.capital.join(', ')}</div>
@@ -12,6 +14,6 @@ const CountryInfo = ({country}) =>  (
     </ul>
     <img src={country.flags.png} alt={`${country.name.common} flag`} />
   </div>
-)
+)}
 
 export default CountryInfo
