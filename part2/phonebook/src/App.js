@@ -24,17 +24,24 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    
-    if (checkIfNameExists(newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-
     const person = {
       name: newName,
       number: newNumber
     }
+    
+    const existingPerson = checkIfNameExists(newName)
 
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        peopleServices
+          .update(existingPerson.id, person)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+          })
+      }
+      return;
+    }
+    
     peopleServices
       .create(person)
       .then(returnedPerson => {
