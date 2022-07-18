@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import peopleServices from './services/people'
+
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [notificationStyle, setNotificationStyle] = useState('')
 
   useEffect(() => {
     peopleServices
@@ -17,6 +21,13 @@ const App = () => {
         setPersons(initialPeople)
       })
   }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setNotification(null)
+    }, 3000) 
+    return () => clearTimeout(timeout)
+  }, [notification])
 
   const checkIfNameExists = (name) => {
     return persons.find( person => person.name === name)
@@ -37,18 +48,30 @@ const App = () => {
           .update(existingPerson.id, person)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+            
+            setNotification(`Added ${person.name}`)
+            setNotificationStyle('success')
+          })
+          .catch(error => {
+            setPersons(persons.filter(person => person.id !== existingPerson.id))
+            
+            setNotification(`Information of ${person.name} has already been removed from server`)
+            setNotificationStyle('error')
           })
       }
-      return;
     }
-    
-    peopleServices
-      .create(person)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+    else {
+      peopleServices
+        .create(person)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          
+          setNotification(`Added ${person.name}`)
+          setNotificationStyle('success')
+        })
+    }
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
@@ -64,11 +87,21 @@ const App = () => {
   }
 
   const handlePersonDelete = (id) => {
-    if(window.confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+    const name = persons.find(person => person.id === id).name
+    if(window.confirm(`Delete ${name}?`)) {
       peopleServices 
         .deletePerson(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id))
+
+          setNotification(`Deleted ${name}`)
+          setNotificationStyle('success')
+        })
+        .catch(error => {
+          setPersons(persons.filter(person => person.id !== id))
+          
+          setNotification(`Information of ${name} has already been removed from server`)
+          setNotificationStyle('error')
         })
     }
   }
@@ -76,6 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} style={notificationStyle} />
       <Filter 
         newFilter={newFilter} 
         handleFilterChange={handleFilterChange} 
