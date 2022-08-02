@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
-const BlogForm = ({createBlog}) => {
-  const [blog, setBlog] = useState({title: '', author: '', url: ''})
+const BlogForm = ({ createBlog }) => {
+  const [blog, setBlog] = useState({ title: '', author: '', url: '' })
 
-  const handleTitleChange = ({target}) => setBlog({...blog, title: target.value})
-  const handleAuthorChange = ({target}) => setBlog({...blog, author: target.value})
-  const handleUrlChange = ({target}) => setBlog({...blog, url: target.value})
+  const handleTitleChange = ({ target }) => setBlog({ ...blog, title: target.value })
+  const handleAuthorChange = ({ target }) => setBlog({ ...blog, author: target.value })
+  const handleUrlChange = ({ target }) => setBlog({ ...blog, url: target.value })
 
   const handleCreateBlog = async (event) => {
     event.preventDefault()
     createBlog(blog)
-    setBlog({title: '', author: '', url: ''})
+    setBlog({ title: '', author: '', url: '' })
   }
 
   return (
@@ -28,7 +28,7 @@ const BlogForm = ({createBlog}) => {
         </div>
         <div>
           author:
-          <input 
+          <input
             type='text'
             value={blog.author}
             name='author'
@@ -37,7 +37,7 @@ const BlogForm = ({createBlog}) => {
         </div>
         <div>
           url:
-          <input 
+          <input
             type='text'
             value={blog.url}
             name='url'
