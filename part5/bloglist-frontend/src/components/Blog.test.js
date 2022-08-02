@@ -4,14 +4,14 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-let container
+let loggedUser, blog
 
 beforeEach(() => {
-  const loggedUser = {
+  loggedUser = {
     username: 'testing-username'
   }
 
-  const blog = {
+  blog = {
     title: 'testing-title',
     author: 'testing-author',
     url: 'testing-url',
@@ -21,11 +21,11 @@ beforeEach(() => {
       username: 'testing-username'
     }
   }
-
-  container = render(<Blog blog={blog} loggedUser={loggedUser} />).container
 })
 
 test('blog component only renders title and author', () => {
+  const { container } = render(<Blog blog={blog} loggedUser={loggedUser} />)
+
   const div1 = container.querySelector('.title-author')
   const div2 = container.querySelector('.title-author-url-likes')
 
@@ -35,10 +35,25 @@ test('blog component only renders title and author', () => {
 
 
 test('blog component renders url and likes after button click', async () => {
+  const { container } = render(<Blog blog={blog} loggedUser={loggedUser} />)
+
   const user = userEvent.setup()
   const viewButton = screen.getByText('view')
   await user.click(viewButton)
 
   const div = container.querySelector('.title-author-url-likes')
   expect(div).not.toHaveStyle('display: none')
+})
+
+test('if like button is clicked twice then event handle is called twice', async () => {
+  const mockLikeHandler = jest.fn()
+
+  render(<Blog blog={blog} loggedUser={loggedUser} likeBlog={mockLikeHandler}/>)
+
+  const user = userEvent.setup()
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockLikeHandler.mock.calls).toHaveLength(2)
 })
