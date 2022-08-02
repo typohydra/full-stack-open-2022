@@ -49,10 +49,12 @@ const App = () => {
       setTimeout(() => {setMessage(null)}, 3000)
     }
   }
+
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
   }
+
   const createBlog = async (blogObject) => {
     try {
       blogService.setToken(user.token)
@@ -72,10 +74,30 @@ const App = () => {
     }
     setTimeout(() => {setMessage(null)}, 3000)
   }
+
   const  likeBlog = async (blogObject) => {
     try {
       const updatedBlog = await blogService.update(blogObject.id, blogObject)
       setBlogs(blogs.map(blog => blog.id !== blogObject.id ? blog : {...updatedBlog, user: blogObject.user}))
+    }
+    catch (exception) {
+      setMessage({
+        text: exception.response.data.error,
+        style: 'error'
+      })   
+    }
+    setTimeout(() => {setMessage(null)}, 3000)
+  }
+
+  const deleteBlog = async (blogObject) => {
+    try {
+      blogService.setToken(user.token)
+      await blogService.deleteBlog(blogObject.id)
+      setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+      setMessage({
+        text: `Deleted blog ${blogObject.title} by ${blogObject.author}`,
+        style: 'success'
+      })
     }
     catch (exception) {
       setMessage({
@@ -126,6 +148,8 @@ const App = () => {
             key={blog.id} 
             blog={blog} 
             likeBlog={likeBlog}
+            deleteBlog={deleteBlog}
+            loggedUser={user}
           />
       )}
     </div>
