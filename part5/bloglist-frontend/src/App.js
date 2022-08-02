@@ -100,7 +100,7 @@ const App = () => {
       {user.name} logged in
       <button type='button' onClick={handleLogout}>logout</button>
       
-      <Togglable buttonLabel='new blog'>
+      <Togglable buttonLabel='create new blog'>
         <BlogForm
           createBlog={createBlog}
         />
