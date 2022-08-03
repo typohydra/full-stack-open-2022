@@ -5,7 +5,7 @@ const Login = ({ username, password, handleLogin, handleUsernameChange, handlePa
       <form onSubmit={handleLogin}>
         <div>
           username
-          <input
+          <input data-cy='username'
             type='text'
             value={username}
             name='Username'
@@ -14,14 +14,14 @@ const Login = ({ username, password, handleLogin, handleUsernameChange, handlePa
         </div>
         <div>
           password
-          <input
+          <input data-cy='password'
             type='password'
             value={password}
             name='Password'
             onChange={handlePasswordChange}
           />
         </div>
-        <button type='submit'>login</button>
+        <button data-cy='login' type='submit'>login</button>
       </form>
     </>
   )
