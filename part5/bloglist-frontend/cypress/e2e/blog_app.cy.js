@@ -43,13 +43,25 @@ describe('Blog app', function() {
       })
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('create new blog').click()
       cy.get('[data-cy=title]').type('new blog title')
       cy.get('[data-cy=author]').type('new blog author')
       cy.get('[data-cy=url]').type('new blog url')
       cy.get('[data-cy=create]').click()
       cy.contains('new blog title new blog author')
+    })
+
+    it('A blog can be liked', function() {
+      cy.contains('create new blog').click()
+      cy.get('[data-cy=title]').type('new blog title')
+      cy.get('[data-cy=author]').type('new blog author')
+      cy.get('[data-cy=url]').type('new blog url')
+      cy.get('[data-cy=create]').click()
+      cy.contains('new blog title new blog author')
+      cy.contains('view').click()
+      cy.contains('like').click()
+      cy.contains('likes 1')
     })
   })
 })
