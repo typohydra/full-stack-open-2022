@@ -32,4 +32,24 @@ describe('Blog app', function() {
       cy.contains('invalid username or password')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.request('POST', 'http://localhost:3003/api/login', {
+        username: 'test username', password: 'test password'
+      }).then(response => {
+        localStorage.setItem('loggedBologAppUser', JSON.stringify(response.body))
+        cy.visit('http://localhost:3000')
+      })
+    })
+
+    it.only('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('[data-cy=title]').type('new blog title')
+      cy.get('[data-cy=author]').type('new blog author')
+      cy.get('[data-cy=url]').type('new blog url')
+      cy.get('[data-cy=create]').click()
+      cy.contains('new blog title new blog author')
+    })
+  })
 })

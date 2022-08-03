@@ -19,7 +19,7 @@ const BlogForm = ({ createBlog }) => {
       <form onSubmit={handleCreateBlog}>
         <div>
           title:
-          <input
+          <input data-cy='title'
             type='text'
             value={blog.title}
             name='title'
@@ -28,7 +28,7 @@ const BlogForm = ({ createBlog }) => {
         </div>
         <div>
           author:
-          <input
+          <input data-cy='author'
             type='text'
             value={blog.author}
             name='author'
@@ -37,14 +37,14 @@ const BlogForm = ({ createBlog }) => {
         </div>
         <div>
           url:
-          <input
+          <input data-cy='url'
             type='text'
             value={blog.url}
             name='url'
             onChange={handleUrlChange}
           />
         </div>
-        <button type='submit'>create</button>
+        <button data-cy='create' type='submit'>create</button>
       </form>
     </>
   )
