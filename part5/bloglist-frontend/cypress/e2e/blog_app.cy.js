@@ -75,5 +75,29 @@ describe('Blog app', function() {
       cy.contains('remove').click()
       cy.get('html').should('not.contain', 'new blog title new blog author')
     })
+
+    it('Blogs are ordered by likes', function() {
+      cy.createBlog({
+        title: 'blog with least likes',
+        author: 'new blog author',
+        url: 'new blog url',
+        likes: 10
+      })
+      cy.createBlog({
+        title: 'blog with most likes',
+        author: 'new blog author',
+        url: 'new blog url',
+        likes: 42
+      })
+      cy.createBlog({
+        title: 'blog with second most likes',
+        author: 'new blog author',
+        url: 'new blog url',
+        likes: 32
+      })
+      cy.get('[data-cy=blog]').eq(0).should('contain', 'blog with most likes')
+      cy.get('[data-cy=blog]').eq(1).should('contain', 'blog with second most likes')
+      cy.get('[data-cy=blog]').eq(2).should('contain', 'blog with least likes')
+    })
   })
 })
