@@ -31,11 +31,19 @@ const Blog = ({ loggedUser }) => {
         <button onClick={handleLike}>like</button>
       </div>
       <div>added by {blog.user.name}</div>
-      {blog.user.username === loggedUser.username ? (
-        <button onClick={handleDeleteBlog}>remove</button>
-      ) : (
-        <div></div>
-      )}
+      {
+        blog.user.username === loggedUser.username
+          ? <button onClick={handleDeleteBlog}>remove</button>
+          : ''
+      }
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment, key) => (
+          <li key={key}>
+            {comment}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
