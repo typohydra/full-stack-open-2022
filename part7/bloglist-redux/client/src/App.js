@@ -8,12 +8,13 @@ import Blog from './components/Blog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { logOutUser, setLoggedUser } from './reducers/userReducer'
+import { setLoggedUser } from './reducers/userReducer'
 
 import {
   BrowserRouter as Router,
   Routes, Route
 } from 'react-router-dom'
+import NavMenu from './components/NavMenu'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,10 +33,6 @@ const App = () => {
     }
   }, [])
 
-  const handleLogout = () => {
-    dispatch(logOutUser())
-  }
-
   if (user === null) {
     return (
       <div>
@@ -47,14 +44,9 @@ const App = () => {
 
   return (
     <Router>
+      <NavMenu user={user} />
       <Notification />
-      <h2>blogs</h2>
-      {user.name} logged in
-      <div>
-        <button type="button" onClick={handleLogout}>
-          logout
-        </button>
-      </div>
+      <h2>blog app</h2>
 
       <Routes>
         <Route path="/users/:id" element={<User />} />

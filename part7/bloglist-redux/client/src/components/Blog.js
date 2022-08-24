@@ -25,7 +25,7 @@ const Blog = ({ loggedUser }) => {
   return (
     <div>
       <h1>{blog.title} {blog.author}</h1>
-      <div><a href={blog.url}>{blog.url}</a></div>
+      <div><a href=''>{blog.url}</a></div>
       <div>
         {blog.likes} likes
         <button onClick={handleLike}>like</button>
