@@ -1,19 +1,21 @@
-import { useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import { useEffect } from 'react'
 import Login from './components/Login'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
+import Users from './components/Users'
+import Blogs from './components/Blogs'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { logOutUser, setLoggedUser } from './reducers/userReducer'
 
+import {
+  BrowserRouter as Router,
+  Routes, Route
+} from 'react-router-dom'
+
 const App = () => {
   const dispatch = useDispatch()
-  const blogFormRef = useRef()
 
-  const blogs = useSelector(state => state.blogs)
   const user = useSelector(state => state.user)
 
   useEffect(() => {
@@ -42,26 +44,21 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <Notification />
       <h2>blogs</h2>
       {user.name} logged in
-      <button type="button" onClick={handleLogout}>
-        logout
-      </button>
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm blogFormRef={blogFormRef} loggedUser={user} />
-      </Togglable>
-      {[...blogs]
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            loggedUser={user}
-          />
-        ))}
-    </div>
+      <div>
+        <button type="button" onClick={handleLogout}>
+          logout
+        </button>
+      </div>
+
+      <Routes>
+        <Route path="/users" element={<Users />} />
+        <Route path="/" element={<Blogs user={user} />} />
+      </Routes>
+    </Router>
   )
 }
 
