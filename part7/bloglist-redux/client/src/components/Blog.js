@@ -1,21 +1,15 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addLikeToBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, loggedUser }) => {
+import { useParams, useNavigate } from 'react-router-dom'
+
+const Blog = ({ loggedUser }) => {
   const dispatch = useDispatch()
-  const [visible, setVisible] = useState(false)
+  const navigate = useNavigate()
+  const id = useParams().id
+  const blog = useSelector(state => state.blogs.find(blog => blog.id === id))
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
+  if(!blog) return null
 
   const handleLike = () => {
     dispatch(addLikeToBlog({ ...blog, likes: blog.likes + 1 }))
@@ -24,32 +18,24 @@ const Blog = ({ blog, loggedUser }) => {
   const handleDeleteBlog = () => {
     if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
       dispatch(deleteBlog(blog, loggedUser.token))
+      navigate('/')
     }
   }
 
   return (
-    <div style={blogStyle} data-cy="blog">
-      <div style={hideWhenVisible} className="title-author">
-        {blog.title} {blog.author}
-        <button onClick={() => setVisible(!visible)}>view</button>
+    <div>
+      <h1>{blog.title} {blog.author}</h1>
+      <div><a href={blog.url}>{blog.url}</a></div>
+      <div>
+        {blog.likes} likes
+        <button onClick={handleLike}>like</button>
       </div>
-      <div style={showWhenVisible} className="title-author-url-likes">
-        <div>
-          {blog.title} {blog.author}
-          <button onClick={() => setVisible(!visible)}>hide</button>
-        </div>
-        <div>{blog.url}</div>
-        <div>
-          likes {blog.likes}
-          <button onClick={handleLike}>like</button>
-        </div>
-        <div>{blog.user.name}</div>
-        {blog.user.username === loggedUser.username ? (
-          <button onClick={handleDeleteBlog}>remove</button>
-        ) : (
-          <div></div>
-        )}
-      </div>
+      <div>added by {blog.user.name}</div>
+      {blog.user.username === loggedUser.username ? (
+        <button onClick={handleDeleteBlog}>remove</button>
+      ) : (
+        <div></div>
+      )}
     </div>
   )
 }
