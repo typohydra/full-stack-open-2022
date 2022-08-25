@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { addLikeToBlog, deleteBlog } from '../reducers/blogReducer'
+import { addLikeToBlog, deleteBlog, addCommentToBlog } from '../reducers/blogReducer'
 
 import { useParams, useNavigate } from 'react-router-dom'
+import { useField } from '../hooks/index'
 
 const Blog = ({ loggedUser }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const id = useParams().id
+  const { reset: commentReset, ...comment } = useField('text')
+
   const blog = useSelector(state => state.blogs.find(blog => blog.id === id))
 
   if(!blog) return null
@@ -20,6 +23,12 @@ const Blog = ({ loggedUser }) => {
       dispatch(deleteBlog(blog, loggedUser.token))
       navigate('/')
     }
+  }
+
+  const handleAddComment = (event) => {
+    event.preventDefault()
+    dispatch(addCommentToBlog(blog, comment.value))
+    commentReset()
   }
 
   return (
@@ -37,6 +46,10 @@ const Blog = ({ loggedUser }) => {
           : ''
       }
       <h3>comments</h3>
+      <form onSubmit={handleAddComment}>
+        <input {...comment}/>
+        <button>add comment</button>
+      </form>
       <ul>
         {blog.comments.map((comment, key) => (
           <li key={key}>

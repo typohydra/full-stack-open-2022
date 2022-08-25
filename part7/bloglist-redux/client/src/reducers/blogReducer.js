@@ -85,4 +85,22 @@ export const deleteBlog = (blog, token) => {
   }
 }
 
+export const addCommentToBlog = (blog, comment) => {
+  return async dispatch => {
+    try {
+      const changedBlog = await blogService.addComment(blog, comment)
+      dispatch(updateBlog(changedBlog))
+      dispatch(setNotification({
+        text: `Added comment ${comment}`,
+        style: 'success',
+      }, 3))
+    } catch (exception) {
+      setNotification(({
+        text: exception.response.data.error,
+        style: 'error',
+      }, 3))
+    }
+  }
+}
+
 export default blogSlice.reducer

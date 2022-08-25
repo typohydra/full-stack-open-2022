@@ -1,23 +1,28 @@
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+import { useField } from '../hooks/index'
 
 const BlogForm = ({ blogFormRef, loggedUser }) => {
   const dispatch = useDispatch()
-  const [blog, setBlog] = useState({ title: '', author: '', url: '' })
 
-  const handleTitleChange = ({ target }) =>
-    setBlog({ ...blog, title: target.value })
-  const handleAuthorChange = ({ target }) =>
-    setBlog({ ...blog, author: target.value })
-  const handleUrlChange = ({ target }) =>
-    setBlog({ ...blog, url: target.value })
+  const { reset: titleReset, ...title } = useField('text')
+  const { reset: authorReset, ...author } = useField('text')
+  const { reset: urlReset, ...url } = useField('text')
 
   const handleCreateBlog = async (event) => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
+
+    const blog = {
+      title: title.value,
+      author: author.value,
+      url: url.value
+    }
+
     dispatch(createBlog(blog, loggedUser.token))
-    setBlog({ title: '', author: '', url: '' })
+    titleReset()
+    authorReset()
+    urlReset()
   }
 
   return (
@@ -28,30 +33,24 @@ const BlogForm = ({ blogFormRef, loggedUser }) => {
           title:
           <input
             data-cy="title"
-            type="text"
-            value={blog.title}
             name="title"
-            onChange={handleTitleChange}
+            {...title}
           />
         </div>
         <div>
           author:
           <input
             data-cy="author"
-            type="text"
-            value={blog.author}
             name="author"
-            onChange={handleAuthorChange}
+            {...author}
           />
         </div>
         <div>
           url:
           <input
             data-cy="url"
-            type="text"
-            value={blog.url}
             name="url"
-            onChange={handleUrlChange}
+            {...url}
           />
         </div>
         <button data-cy="create" type="submit">
