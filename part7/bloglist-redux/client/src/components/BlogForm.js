@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { useField } from '../hooks/index'
+import { Button, Form } from '../StyledComponents/form.styled'
 
 const BlogForm = ({ blogFormRef, loggedUser }) => {
   const dispatch = useDispatch()
@@ -27,36 +28,36 @@ const BlogForm = ({ blogFormRef, loggedUser }) => {
 
   return (
     <>
-      <h2>create new</h2>
-      <form onSubmit={handleCreateBlog}>
-        <div>
-          title:
+      <Form onSubmit={handleCreateBlog}>
+        <h2>create new</h2>
+        <label>title
           <input
             data-cy="title"
             name="title"
+            id='title'
             {...title}
           />
-        </div>
-        <div>
-          author:
+        </label>
+        <label>author
           <input
             data-cy="author"
             name="author"
+            id="author"
             {...author}
           />
-        </div>
-        <div>
-          url:
+        </label>
+        <label>url
           <input
             data-cy="url"
             name="url"
+            id="url"
             {...url}
           />
-        </div>
-        <button data-cy="create" type="submit">
+        </label>
+        <Button data-cy="create" type="submit">
           create
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   )
 }

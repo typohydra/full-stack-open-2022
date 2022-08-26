@@ -16,6 +16,8 @@ import {
 } from 'react-router-dom'
 import NavMenu from './components/NavMenu'
 
+import { CenteredBox, Page } from './StyledComponents/index.styled'
+
 const App = () => {
   const dispatch = useDispatch()
 
@@ -35,25 +37,26 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <CenteredBox>
         <Notification />
         <Login />
-      </div>
+      </CenteredBox>
     )
   }
 
   return (
     <Router>
-      <NavMenu user={user} />
-      <Notification />
-      <h2>blog app</h2>
+      <Page>
+        <NavMenu user={user} />
+        <Notification />
 
-      <Routes>
-        <Route path="/users/:id" element={<User />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/blogs/:id" element={<Blog loggedUser={user} />} />
-        <Route path="/" element={<Blogs user={user} />} />
-      </Routes>
+        <Routes>
+          <Route path="/users/:id" element={<User />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/blogs/:id" element={<Blog loggedUser={user} />} />
+          <Route path="/" element={<Blogs user={user} />} />
+        </Routes>
+      </Page>
     </Router>
   )
 }

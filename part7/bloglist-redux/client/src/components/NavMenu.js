@@ -1,18 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { logOutUser } from '../reducers/userReducer'
 import { useDispatch } from 'react-redux'
+import { Button } from '../StyledComponents/form.styled'
+import { Nav } from '../StyledComponents/index.styled'
 
 const NavMenu = ({ user }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  const navMenuStyle = {
-    padding: 10,
-    backgroundColor: 'lightgray',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    gap: 10
-  }
 
   const handleLogout = () => {
     dispatch(logOutUser())
@@ -20,17 +14,15 @@ const NavMenu = ({ user }) => {
   }
 
   return (
-    <div style={navMenuStyle}>
+    <Nav>
       <Link to="/">blogs</Link>
       <Link to="/users">users</Link>
 
-      {user.name} logged in
-      <div>
-        <button type="button" onClick={handleLogout}>
+      <p>{user.name} logged in</p>
+      <Button type="button" onClick={handleLogout}>
           logout
-        </button>
-      </div>
-    </div>
+      </Button>
+    </Nav>
   )
 }
 

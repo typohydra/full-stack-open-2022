@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { logInUser } from '../reducers/userReducer'
 import { useField } from '../hooks/index'
+import { Button, Form } from '../StyledComponents/form.styled'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -16,28 +17,28 @@ const Login = () => {
 
   return (
     <>
-      <h1>log in to application</h1>
-      <form onSubmit={handleLogin}>
-        <div>
+      <Form onSubmit={handleLogin}>
+        <h1>log in to application</h1>
+        <label>
           username
           <input
             data-cy="username"
             name="Username"
             {...username}
           />
-        </div>
-        <div>
+        </label>
+        <label>
           password
           <input
             data-cy="password"
             name="Password"
             {...password}
           />
-        </div>
-        <button data-cy="login" type="submit">
+        </label>
+        <Button data-cy="login" type="submit">
           login
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   )
 }

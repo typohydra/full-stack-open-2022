@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeUsers } from '../reducers/usersReducer'
+import { Table } from '../StyledComponents/table.styled'
 
 import {
   Link
@@ -18,11 +19,10 @@ const Users = () => {
   if (users) {
     return (
       <div>
-        <h1>Users</h1>
-        <table>
+        <Table>
           <tbody>
             <tr>
-              <th></th>
+              <th>Users</th>
               <th>blogs created</th>
             </tr>
             {users.map(user => (
@@ -34,7 +34,7 @@ const Users = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     )
   }
