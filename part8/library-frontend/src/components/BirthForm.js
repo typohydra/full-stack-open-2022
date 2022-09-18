@@ -3,16 +3,22 @@ import Select from 'react-select';
 import { EDIT_BIRTHYEAR } from '../queries'
 import { useMutation } from '@apollo/client'
 
-const BirthForm = ({authors}) => {
+const BirthForm = ({authors, setError}) => {
   const [selectedName, setSelectedName] = useState(null);
   const [born, setBorn] = useState('')
 
-  const [ editAuthor ] = useMutation(EDIT_BIRTHYEAR)
+  const [ editAuthor ] = useMutation(EDIT_BIRTHYEAR, {
+    onError: (error) => {
+      error.graphQLErrors.length > 0
+        ? setError(error.graphQLErrors[0].message)
+        : setError('You need to fill in author\'s name and birthyear to update')
+    } 
+  })
 
   const submit = async (event) => {
     event.preventDefault()
 
-    editAuthor({  variables: { name: selectedName.value, setBornTo: Number(born) } })
+    editAuthor({  variables: { name: selectedName?.value, setBornTo: Number(born) } })
 
     setSelectedName('')
     setBorn('')

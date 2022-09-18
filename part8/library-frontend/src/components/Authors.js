@@ -2,7 +2,7 @@ import { ALL_AUTHORS } from '../queries'
 import { useQuery } from '@apollo/client'
 import BirthForm from './BirthForm'
 
-const Authors = ({show}) => {
+const Authors = ({show, setError}) => {
   const result = useQuery(ALL_AUTHORS, {
     skip: !show,
   })
@@ -36,7 +36,7 @@ const Authors = ({show}) => {
           ))}
         </tbody>
       </table>
-      <BirthForm authors={authors} />
+      <BirthForm authors={authors} setError={setError} />
     </div>
   )
 }
