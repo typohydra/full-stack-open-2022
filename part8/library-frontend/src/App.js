@@ -6,6 +6,7 @@ import NewBook from './components/NewBook'
 import Notify from './components/Notify'
 import LoginForm from './components/LoginForm' 
 import { useEffect } from 'react'
+import Recommend from './components/Recommend'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -29,6 +30,7 @@ const App = () => {
 
   const logout = () => {
     setToken(null)
+    setPage('authors')
     localStorage.clear()
     client.resetStore()
   }
@@ -59,6 +61,7 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
+        <button onClick={() => setPage('recommend')}>recommend</button>
         <button onClick={logout}>logout</button>
       </div>
 
@@ -69,6 +72,8 @@ const App = () => {
       <Books show={page === 'books'} />
 
       <NewBook show={page === 'add'} setError={notify} />
+
+      <Recommend show={page === 'recommend'} />
     </div>
   )
 }
