@@ -21,7 +21,7 @@ const parseBmiArguments = (args: Array<string>): BmiValues => {
   }
 };
 
-const calculateBmi = (heightCM: number, weightKG: number): string => {
+export const calculateBmi = (heightCM: number, weightKG: number): string => {
   const bmi = weightKG / (heightCM / 100) ** 2;
   if (bmi < 18.5) return "Underweight (unhealthy weight)";
   else if (bmi < 25) return "Normal (healthy weight)";
