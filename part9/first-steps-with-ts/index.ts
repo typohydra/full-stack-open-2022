@@ -2,15 +2,12 @@ import express from "express";
 const app = express();
 import { calculateBmi } from "./bmiCalculator";
 
-app.get("/hello", (_req, res) => {
+app.get("/hello", (_req, res) => {  
   res.send("Hello Full Stack!");
 });
 
 app.get("/bmi", (req, res) => {
   const { height, weight } = req.query;
-  console.log(req.query);
-  console.log(height);
-  console.log(weight);
 
   if (
     Number(height) < 0 ||

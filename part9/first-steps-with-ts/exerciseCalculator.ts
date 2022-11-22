@@ -2,9 +2,9 @@ interface Report {
   periodLength: number;
   trainingDays: number;
   success: boolean;
-  rating: Number;
+  rating: number;
   ratingDescription: string;
-  target: Number;
+  target: number;
   average: number;
 }
 
@@ -13,7 +13,7 @@ interface ExercisesValues {
   target: number;
 }
 
-const parseExercisesArguments = (args: Array<string>) => {
+const parseExercisesArguments = (args: Array<string>): ExercisesValues => {
   if (args.length < 3) throw new Error("Not enough arguments");
 
   const [, , target, ...hours] = args;
