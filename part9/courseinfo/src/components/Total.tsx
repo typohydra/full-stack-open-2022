@@ -1,6 +1,6 @@
-import { Course } from "../types";
+import { CoursePart } from "../types";
 
-const Total = ({ parts }: { parts: Array<Course> }) => {
+const Total = ({ parts }: { parts: Array<CoursePart> }) => {
   return (
     <p>
       Number of exercises{" "}

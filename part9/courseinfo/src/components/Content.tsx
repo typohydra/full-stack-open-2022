@@ -1,12 +1,13 @@
-import { Course } from "../types";
+import { CoursePart } from "../types";
+import Part from "./Part";
 
-const Content = ({ parts }: { parts: Array<Course> }) => {
+const Content = ({ parts }: { parts: Array<CoursePart> }) => {
   return (
     <div>
       {parts.map((part, i) => (
-        <p key={i}>
-          {part.name} {part.exerciseCount}
-        </p>
+        <div key={i} style={{margin: " 0px 0px 15px 0px"}}>
+          <Part part={part} />
+        </div>
       ))}
     </div>
   );
