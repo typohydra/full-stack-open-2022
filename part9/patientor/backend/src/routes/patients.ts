@@ -13,12 +13,18 @@ router.post("/", (req, res) => {
     const addedEntry = patientsServices.addPatient(newPatientEntry);
     res.json(addedEntry);
   } catch (error: unknown) {
-    let errorMessage = 'Something went wrong.';
+    let errorMessage = "Something went wrong.";
     if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
+      errorMessage += " Error: " + error.message;
     }
     res.status(400).send(errorMessage);
   }
+});
+
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const patient = patientsServices.getPatient(id);
+  res.send(patient);
 });
 
 export default router;
