@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useStateValue } from "../state";
+import { useStateValue, getPatient } from "../state";
 import { Patient } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
@@ -11,14 +11,14 @@ const PatientPage = () => {
   const [patient, setPatient] = useState<Patient | undefined>();
 
   useEffect(() => {
-    const getPatient = async () => {
+    const getPatientDetails = async () => {
       try {
         const { data: patientDetails } = await axios.get<Patient>(
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           `${apiBaseUrl}/patients/${id}`
         );
         setPatient(patientDetails);        
-        dispatch({ type: "GET_PATIENT", payload: patientDetails });
+        dispatch(getPatient(patientDetails));
       } catch (e) {
         console.error(e);
       }
@@ -27,7 +27,7 @@ const PatientPage = () => {
     if (id && state.patientDetails[id]) {
       setPatient(state.patientDetails[id]);
     } else {
-      void getPatient();
+      void getPatientDetails();
     }
   }, [id]);
 
