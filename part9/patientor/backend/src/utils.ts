@@ -35,6 +35,31 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
+const isHospitalEntry = (entry: any): boolean => {
+  return entry.type === "Hospital";
+};
+const isOccupationalHealthcareEntry = (entry: any): boolean => {
+  return entry.type === "OccupationalHealthcare";
+};
+
+const isHealthCheckEntry = (entry: any): boolean => {
+  return entry.type === "HealthCheck";
+};
+
+const parseEntries = (entries: any): any => {
+  const isCorrectlyFormatted = entries.every(
+    (entry: any) =>
+      isHospitalEntry(entry) ||
+      isOccupationalHealthcareEntry(entry) ||
+      isHealthCheckEntry(entry)
+  );
+
+  if (!isCorrectlyFormatted) {
+    throw new Error("Incorrect Entry Types");
+  }
+  return entries;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toNewPatientEntry = (object: any): NewPatient => {
   const newEntry: NewPatient = {
@@ -43,7 +68,7 @@ const toNewPatientEntry = (object: any): NewPatient => {
     ssn: parseData(object.ssn),
     gender: parseGender(object.gender),
     occupation: parseData(object.occupation),
-    entries: object.entries,
+    entries: parseEntries(object.entries),
   };
 
   return newEntry;
