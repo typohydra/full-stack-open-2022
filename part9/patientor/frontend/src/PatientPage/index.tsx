@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useStateValue, getPatient } from "../state";
+import { useStateValue, getPatient, setDiagnosesList } from "../state";
 import { Patient, Entry, Diagnosis } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
@@ -9,6 +9,7 @@ const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
   const [state, dispatch] = useStateValue();
   const [patient, setPatient] = useState<Patient | undefined>();
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>();
 
   useEffect(() => {
     const getPatientDetails = async () => {
@@ -24,14 +25,35 @@ const PatientPage = () => {
       }
     };
 
+    const getDiagnosisData = async () => {
+      try {
+        const { data: diagnosesData } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+
+        setDiagnoses(diagnosesData);
+        dispatch(setDiagnosesList(diagnosesData));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     if (id && state.patientDetails[id]) {
       setPatient(state.patientDetails[id]);
+
+      if (state.diagnoses) {
+        const diagnosesArray = Object.keys(state.diagnoses).map(
+          (code) => state.diagnoses[code]
+        );
+        setDiagnoses(diagnosesArray);
+      }
     } else {
       void getPatientDetails();
+      void getDiagnosisData();
     }
   }, [id]);
 
-  if (!patient) return <div>Patient Details Are Loading</div>;
+  if (!patient || !diagnoses) return <div>Patient Details Are Loading</div>;
 
   return (
     <div>
@@ -47,9 +69,15 @@ const PatientPage = () => {
           <div key={entry.id}>
             {entry.date} {entry.description}
             <ul>
-              {entry.diagnosisCodes?.map((code: Diagnosis['code']) => 
-                <li key={code}>{code}</li>
-              )}
+              {entry.diagnosisCodes?.map((code: Diagnosis["code"]) => (
+                <li key={code}>
+                  {code}{" "}
+                  {
+                    diagnoses?.find((diagnosis) => diagnosis.code === code)
+                      ?.name
+                  }
+                </li>
+              ))}
             </ul>
           </div>
         );
