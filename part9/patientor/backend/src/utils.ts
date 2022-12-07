@@ -8,6 +8,7 @@ const parseData = (data: unknown): string => {
   if (!data || !isString(data)) {
     throw new Error("Incorrect or missing name/ssn/occupation");
   }
+
   return data;
 };
 
@@ -19,6 +20,7 @@ const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error("Incorrect or missing date: " + date);
   }
+
   return date;
 };
 
@@ -32,6 +34,7 @@ const parseGender = (gender: unknown): Gender => {
   if (!gender || !isGender(gender)) {
     throw new Error("Incorrect or missing gender: " + gender);
   }
+
   return gender;
 };
 
@@ -57,6 +60,7 @@ const parseEntries = (entries: any): any => {
   if (!isCorrectlyFormatted) {
     throw new Error("Incorrect Entry Types");
   }
+
   return entries;
 };
 
@@ -68,7 +72,7 @@ const toNewPatientEntry = (object: any): NewPatient => {
     ssn: parseData(object.ssn),
     gender: parseGender(object.gender),
     occupation: parseData(object.occupation),
-    entries: parseEntries(object.entries),
+    entries: object.entries ? parseEntries(object.entries) : [],
   };
 
   return newEntry;

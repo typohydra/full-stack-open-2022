@@ -5,6 +5,18 @@ import { Patient, Entry, Diagnosis } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 
+import EntryDetails from "../components/EntryDetails";
+
+import FemaleIcon from "@mui/icons-material/Female";
+import MaleIcon from "@mui/icons-material/Male";
+
+const entryStyle = {
+  border: "solid 3px",
+  padding: 10,
+  margin: "0px 0px 10px 0px",
+  borderRadius: 5,
+};
+
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
   const [state, dispatch] = useStateValue();
@@ -58,7 +70,8 @@ const PatientPage = () => {
   return (
     <div>
       <h2>
-        {patient.name} - <i>{patient?.gender}</i>
+        {patient.name}{" "}
+        {patient?.gender === "female" ? <FemaleIcon /> : <MaleIcon />}
       </h2>
       <div>ssh: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
@@ -66,8 +79,8 @@ const PatientPage = () => {
       <h3>entries</h3>
       {patient.entries.map((entry: Entry) => {
         return (
-          <div key={entry.id}>
-            {entry.date} {entry.description}
+          <div key={entry.id} style={entryStyle}>
+            <EntryDetails entry={entry} />
             <ul>
               {entry.diagnosisCodes?.map((code: Diagnosis["code"]) => (
                 <li key={code}>
