@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useStateValue, getPatient } from "../state";
-import { Patient } from "../types";
+import { Patient, Entry, Diagnosis } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 
@@ -17,13 +17,13 @@ const PatientPage = () => {
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           `${apiBaseUrl}/patients/${id}`
         );
-        setPatient(patientDetails);        
+        setPatient(patientDetails);
         dispatch(getPatient(patientDetails));
       } catch (e) {
         console.error(e);
       }
     };
-    
+
     if (id && state.patientDetails[id]) {
       setPatient(state.patientDetails[id]);
     } else {
@@ -40,6 +40,20 @@ const PatientPage = () => {
       </h2>
       <div>ssh: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+
+      <h3>entries</h3>
+      {patient.entries.map((entry: Entry) => {
+        return (
+          <div key={entry.id}>
+            {entry.date} {entry.description}
+            <ul>
+              {entry.diagnosisCodes?.map((code: Diagnosis['code']) => 
+                <li key={code}>{code}</li>
+              )}
+            </ul>
+          </div>
+        );
+      })}
     </div>
   );
 };
