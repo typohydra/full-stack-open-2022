@@ -18,7 +18,6 @@ const Hospital: React.FC<{ entry: HospitalEntry }> = ({ entry }) => {
       <div>
         <i>{entry.description}</i>
       </div>
-      <div>diagnose by MD House</div>
     </div>
   );
 };
@@ -34,7 +33,6 @@ const OccupationalHealthcare: React.FC<{
       <div>
         <i>{entry.description}</i>
       </div>
-      <div>diagnose by MD House</div>
     </div>
   );
 };
@@ -68,7 +66,6 @@ const HealthCheck: React.FC<{ entry: HealthCheckEntry }> = ({ entry }) => {
         <i>{entry.description}</i>
       </div>
       <FavoriteIcon style={heartColor} />
-      <div>diagnose by MD House</div>
     </div>
   );
 };

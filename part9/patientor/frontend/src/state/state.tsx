@@ -11,8 +11,8 @@ export type State = {
 
 const initialState: State = {
   patients: {},
-  patientDetails: {} , 
-  diagnoses: {}  
+  patientDetails: {}, 
+  diagnoses: {}
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

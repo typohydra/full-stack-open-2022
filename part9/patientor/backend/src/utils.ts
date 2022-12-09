@@ -45,11 +45,10 @@ const isNewBaseEntry = (entry: any): boolean => {
   )
     throw new Error("diagnosisCodes must be string values");
 
-  return (
-    isString(entry.description) &&
-    isDate(entry.date) &&
-    isString(entry.specialist)
-  );
+  if (!isDate(entry.date))
+    throw new Error("Incorrect or missing date: " + entry.date);
+
+  return isString(entry.description) && isString(entry.specialist);
 };
 
 const isHospitalEntry = (entry: any): boolean => {

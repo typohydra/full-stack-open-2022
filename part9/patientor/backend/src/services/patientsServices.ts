@@ -36,7 +36,7 @@ const addEntryToPatient = (entry: NewEntry, patientID: string): Entry => {
     id: uuid(),
     ...entry,
   };
-
+  
   patients.map((patient) => {
     if (patient.id === patientID) {
       patient.entries.push(newEntry);
