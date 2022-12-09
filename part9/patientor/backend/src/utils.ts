@@ -1,4 +1,4 @@
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender, NewEntry } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -38,15 +38,55 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
-const isHospitalEntry = (entry: any): boolean => {
-  return entry.type === "Hospital";
+const isNewBaseEntry = (entry: any): boolean => {
+  if (
+    entry.hasOwnProperty("diagnosisCodes") &&
+    !entry.diagnosisCodes.every((code: any) => isString(code))
+  )
+    throw new Error("diagnosisCodes must be string values");
+
+  return (
+    isString(entry.description) &&
+    isDate(entry.date) &&
+    isString(entry.specialist)
+  );
 };
+
+const isHospitalEntry = (entry: any): boolean => {
+  return (
+    entry.type === "Hospital" &&
+    entry.hasOwnProperty("discharge") &&
+    entry.discharge.hasOwnProperty("date") &&
+    isDate(entry.discharge.date) &&
+    entry.discharge.hasOwnProperty("criteria") &&
+    isString(entry.discharge.criteria)
+  );
+};
+
 const isOccupationalHealthcareEntry = (entry: any): boolean => {
-  return entry.type === "OccupationalHealthcare";
+  if (entry.hasOwnProperty("sickLeave")) {
+    if (
+      !entry.sickLeave.hasOwnProperty("startDate") ||
+      !isDate(entry.sickLeave.startDate) ||
+      !entry.sickLeave.hasOwnProperty("endDate") ||
+      !isDate(entry.sickLeave.endDate)
+    )
+      return false;
+  }
+
+  return (
+    entry.type === "OccupationalHealthcare" &&
+    entry.hasOwnProperty("employerName") &&
+    isString(entry.employerName)
+  );
 };
 
 const isHealthCheckEntry = (entry: any): boolean => {
-  return entry.type === "HealthCheck";
+  return (
+    entry.type === "HealthCheck" &&
+    entry.hasOwnProperty("healthCheckRating") &&
+    [0, 1, 2, 3].includes(entry.healthCheckRating)
+  );
 };
 
 const parseEntries = (entries: any): any => {
@@ -66,7 +106,7 @@ const parseEntries = (entries: any): any => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toNewPatientEntry = (object: any): NewPatient => {
-  const newEntry: NewPatient = {
+  const newPatientEntry: NewPatient = {
     name: parseData(object.name),
     dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseData(object.ssn),
@@ -75,7 +115,24 @@ const toNewPatientEntry = (object: any): NewPatient => {
     entries: object.entries ? parseEntries(object.entries) : [],
   };
 
-  return newEntry;
+  return newPatientEntry;
 };
 
-export default toNewPatientEntry;
+const toNewEntry = (object: any): NewEntry => {
+  if (!isNewBaseEntry(object)) {
+    throw new Error(`Missing mandatory values, Not a base entry`);
+  }
+
+  if (
+    isHealthCheckEntry(object) ||
+    isHospitalEntry(object) ||
+    isOccupationalHealthcareEntry(object)
+  )
+    return object;
+
+  throw new Error(
+    `Entry must be HealthCheckEntry or HospitalEntry or OccupationalHealthcareEntry`
+  );
+};
+
+export { toNewPatientEntry, toNewEntry };
